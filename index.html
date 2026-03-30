@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damion Torrez — Visual World Builder</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400&display=swap');
+
+:root {
+  --night: #0d0d1a;
+  --twilight-deep: #1a1a2e;
+  --twilight-mid: #16213e;
+  --twilight-light: #0f3460;
+  --indiglo: #00FFCC;
+  --blue: #2979FF;
+  --pink: #FF4FA0;
+  --sunset-orange: #ff6b35;
+  --sunset-gold: #ffd700;
+  --cream: #f5f3f0;
+  --limestone: #e6e2d3;
+  --building-stone: #c8c4b8;
+  --window-frame: #8b8680;
+  --brass: #b5651d;
+  --shadow: rgba(13, 13, 26, 0.8);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damion Torrez — Visual World Builder</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400&display=swap');
+
+:root {
+  --night: #0d0d1a;
+  --twilight-deep: #1a1a2e;
+  --twilight-mid: #16213e;
+  --twilight-light: #0f3460;
+  --indiglo: #00FFCC;
+  --blue: #2979FF;
+  --pink: #FF4FA0;
+  --sunset-orange: #ff6b35;
+  --sunset-gold: #ffd700;
+  --cream: #f5f3f0;
+  --limestone: #e6e2d3;
+  --building-stone: #c8c4b8;
+  --window-frame: #8b8680;
+  --brass: #b5651d;
+  --shadow: rgba(13, 13, 26, 0.8);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cormorant Garamond', serif;
+  background: var(--night);
+  color: var(--cream);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  position: fixed; width: 6px; height: 6px;
+  background: var(--indiglo); border-radius: 50%;
+  pointer-events: none; z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, opacity 0.3s;
+  mix-blend-mode: screen;
+}
+
+.cursor-ring {
+  position: fixed; width: 32px; height: 32px;
+  border: 1px solid rgba(0, 255, 204, 0.4); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease;
+}
+
+/* MAIN WORLD CONTAINER */
+.world {
+  position: relative;
+  height: 500vh;
+}
+
+/* TWILIGHT SKY */
+.sky {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 100vh;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    var(--night) 0%,
+    var(--twilight-deep) 15%,
+    var(--twilight-mid) 35%,
+    var(--twilight-light) 55%,
+    var(--blue) 75%,
+    var(--pink) 90%,
+    var(--sunset-orange) 100%
+  );
+}
+
+/* STARS AND SHOOTING STAR */
+.stars {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(3px 3px at 15% 20%, var(--cream), transparent),
+    radial-gradient(2px 2px at 85% 15%, var(--indiglo), transparent),
+    radial-gradient(2px 2px at 70% 25%, var(--cream), transparent),
+    radial-gradient(3px 3px at 30% 10%, var(--sunset-gold), transparent),
+    radial-gradient(2px 2px at 90% 35%, var(--cream), transparent),
+    radial-gradient(2px 2px at 20% 70%, var(--indiglo), transparent),
+    radial-gradient(3px 3px at 60% 8%, var(--cream), transparent);
+  animation: twinkle 6s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.shooting-star {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--indiglo), transparent);
+  transform: rotate(25deg);
+  opacity: 0;
+  animation: shootingStar 8s ease-in-out infinite;
+}
+
+@keyframes shootingStar {
+  0%, 90% { opacity: 0; transform: translateX(0) translateY(0) rotate(25deg); }
+  5% { opacity: 1; }
+  25% { opacity: 0.8; transform: translateX(200px) translateY(100px) rotate(25deg); }
+  30%, 100% { opacity: 0; transform: translateX(400px) translateY(200px) rotate(25deg); }
+}
+
+/* BUILDING FACADE */
+.building {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 120vh;
+  top: 10vh;
+  z-index: 3;
+  background: linear-gradient(
+    to bottom,
+    var(--limestone) 0%,
+    var(--building-stone) 40%,
+    var(--building-stone) 60%,
+    #b8b4a8 100%
+  );
+  box-shadow: 
+    inset 4px 0 8px rgba(0,0,0,0.2),
+    inset -4px 0 8px rgba(0,0,0,0.2),
+    0 0 80px var(--shadow);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.building::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 18vh,
+    rgba(139, 134, 128, 0.3) 18vh,
+    rgba(139, 134, 128, 0.3) 19vh
+  );
+}
+
+/* ARCHITECTURAL DETAILS */
+.cornice {
+  position: absolute;
+  top: 15vh;
+  left: -20px; right: -20px;
+  height: 8px;
+  background: linear-gradient(to bottom, var(--brass), #8b5a2b);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.balcony {
+  position: absolute;
+  bottom: 25vh;
+  left: 100px; right: 100px;
+  height: 2px;
+  background: var(--brass);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.balcony::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 40px;
+  background: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 8px,
+    var(--window-frame) 8px,
+    var(--window-frame) 10px
+  );
+  opacity: 0.6;
+}
+
+/* WINDOW SYSTEM */
+.window-floor {
+  position: absolute;
+  left: 40px; right: 40px;
+  height: 16vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.window {
+  width: 140px; 
+  height: 180px;
+  position: relative;
+  background: var(--night);
+  border: 8px solid var(--window-frame);
+  border-radius: 12px 12px 4px 4px;
+  overflow: hidden;
+  cursor: none;
+  transition: all 0.5s ease;
+  box-shadow: 
+    inset 0 0 20px rgba(0,0,0,0.5),
+    0 8px 24px rgba(0,0,0,0.4);
+}
+
+.window:hover {
+  transform: scale(1.08) translateY(-8px);
+  border-color: var(--indiglo);
+  box-shadow: 
+    inset 0 0 20px rgba(0,0,0,0.5),
+    0 0 40px rgba(0, 255, 204, 0.5),
+    0 12px 32px rgba(0,0,0,0.6);
+}
+
+.window-frame-detail {
+  position: absolute;
+  top: 50%;
+  left: 4px; right: 4px;
+  height: 2px;
+  background: var(--window-frame);
+  z-index: 2;
+}
+
+.window-frame-detail::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 200%;
+  background: var(--window-frame);
+}
+
+.window-content {
+  position: absolute;
+  inset: 8px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 4px;
+  transition: all 0.5s ease;
+  filter: brightness(0.8) contrast(1.1);
+}
+
+.window:hover .window-content {
+  filter: brightness(1) contrast(1.2);
+  transform: scale(1.05);
+}
+
+.window-glow {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, 
+    transparent 20%, 
+    rgba(0, 255, 204, 0.1) 50%, 
+    transparent 80%
+  );
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: windowShimmer 3s ease infinite;
+}
+
+.window:hover .window-glow {
+  opacity: 1;
+}
+
+@keyframes windowShimmer {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.3; }
+}
+
+.window-title {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cream);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.window:hover .window-title {
+  opacity: 1;
+}
+
+/* NAVIGATION */
+.nav {
+  position: fixed;
+  top: 50px;
+  right: 50px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nav-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-decoration: none;
+  padding: 12px 20px;
+  border: 1px solid rgba(245, 243, 240, 0.15);
+  transition: all 0.3s ease;
+  background: rgba(13, 13, 26, 0.4);
+  backdrop-filter: blur(15px);
+  border-radius: 4px;
+}
+
+.nav-item:hover {
+  border-color: var(--indiglo);
+  background: rgba(0, 255, 204, 0.08);
+  color: var(--indiglo);
+  transform: translateX(-8px);
+}
+
+/* CONTENT OVERLAY */
+.content-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(13, 13, 26, 0.95);
+  z-index: 1500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(20px);
+}
+
+.content-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.content-panel {
+  background: linear-gradient(135deg, var(--twilight-deep), var(--twilight-mid));
+  border: 2px solid var(--indiglo);
+  border-radius: 12px;
+  padding: 50px;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 255, 204, 0.2);
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: none;
+  border: none;
+  color: var(--indiglo);
+  font-size: 28px;
+  cursor: none;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: var(--pink);
+  transform: rotate(90deg);
+}
+
+.content-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  color: var(--sunset-gold);
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.content-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--cream);
+  margin-bottom: 30px;
+}
+
+.content-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.content-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border: 2px solid var(--window-frame);
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.content-image:hover {
+  transform: scale(1.05);
+  border-color: var(--indiglo);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .building {
+    width: 90vw;
+    max-width: 500px;
+  }
+  
+  .window {
+    width: 110px;
+    height: 140px;
+  }
+  
+  .window-floor {
+    left: 20px;
+    right: 20px;
+    padding: 0 10px;
+  }
+  
+  .nav {
+    top: 30px;
+    right: 30px;
+    gap: 12px;
+  }
+  
+  .content-panel {
+    margin: 20px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .window-floor {
+    flex-direction: column;
+    height: 24vh;
+    gap: 15px;
+  }
+  
+  .window {
+    width: 120px;
+    height: 90px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAVIGATION -->
+<nav class="nav">
+  <a href="#" class="nav-item" onclick="scrollToFloor(1)">IDENTITY</a>
+  <a href="#" class="nav-item" onclick="scrollToFloor(2)">EVENTS</a>
+  <a href="#" class="nav-item" onclick="scrollToFloor(3)">DIGITAL ART</a>
+  <a href="#" class="nav-item" onclick="scrollToFloor(4)">PHOTOGRAPHY</a>
+</nav>
+
+<!-- MAIN WORLD CONTAINER -->
+<div class="world">
+
+  <!-- TWILIGHT SKY -->
+  <div class="sky">
+    <div class="stars"></div>
+    <div class="shooting-star"></div>
+  </div>
+
+  <!-- BUILDING FACADE -->
+  <div class="building">
+    
+    <!-- ARCHITECTURAL DETAILS -->
+    <div class="cornice"></div>
+    <div class="balcony"></div>
+
+    <!-- FLOOR 1 - BRAND IDENTITY -->
+    <div class="window-floor" style="top: 25vh;">
+      <div class="window" onclick="showContent('identity')">
+        <div class="window-content" style="background-image: url('logo_1.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Carriage House</div>
+      </div>
+      <div class="window" onclick="showContent('identity')">
+        <div class="window-content" style="background-image: url('logo_9.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Ghost Color</div>
+      </div>
+      <div class="window" onclick="showContent('identity')">
+        <div class="window-content" style="background-image: url('logo_5.png'); background-color: var(--cream);"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">DT Mark</div>
+      </div>
+    </div>
+
+    <!-- FLOOR 2 - EVENT BRANDING -->
+    <div class="window-floor" style="top: 45vh;">
+      <div class="window" onclick="showContent('events')">
+        <div class="window-content" style="background-image: url('horror_poster_2019.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Horror Festival</div>
+      </div>
+      <div class="window" onclick="showContent('events')">
+        <div class="window-content" style="background-image: url('horror_tickets.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Tickets</div>
+      </div>
+      <div class="window" onclick="showContent('events')">
+        <div class="window-content" style="background-image: url('horror_badge.png'); background-color: var(--cream);"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Credentials</div>
+      </div>
+    </div>
+
+    <!-- FLOOR 3 - DIGITAL ART -->
+    <div class="window-floor" style="top: 65vh;">
+      <div class="window" onclick="showContent('art')">
+        <div class="window-content" style="background-image: url('art_6.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Tribal Forms</div>
+      </div>
+      <div class="window" onclick="showContent('art')">
+        <div class="window-content" style="background-image: url('art_9.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Ornate</div>
+      </div>
+      <div class="window" onclick="showContent('art')">
+        <div class="window-content" style="background-image: url('art_7.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Crown Skull</div>
+      </div>
+    </div>
+
+    <!-- FLOOR 4 - PHOTOGRAPHY -->
+    <div class="window-floor" style="top: 85vh;">
+      <div class="window" onclick="showContent('photography')">
+        <div class="window-content" style="background-image: url('mm_48.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Self Portrait</div>
+      </div>
+      <div class="window" onclick="showContent('photography')">
+        <div class="window-content" style="background-image: url('mm_4.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Fire Entity</div>
+      </div>
+      <div class="window" onclick="showContent('photography')">
+        <div class="window-content" style="background-image: url('mm_20.jpg');"></div>
+        <div class="window-frame-detail"></div>
+        <div class="window-glow"></div>
+        <div class="window-title">Astronomers</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONTENT OVERLAY -->
+<div class="content-overlay" id="contentOverlay">
+  <div class="content-panel">
+    <button class="close-btn" onclick="hideContent()">&times;</button>
+    <div id="overlayContent"></div>
+  </div>
+</div>
+
+<script>
+// Cursor tracking
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.1;
+  ringY += (mouseY - ringY) * 0.1;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+// Cursor hover effects
+document.querySelectorAll('.window, .nav-item, .close-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '12px';
+    cursor.style.height = '12px';
+    cursorRing.style.width = '50px';
+    cursorRing.style.height = '50px';
+    cursorRing.style.borderColor = 'rgba(0, 255, 204, 0.8)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '6px';
+    cursor.style.height = '6px';
+    cursorRing.style.width = '32px';
+    cursorRing.style.height = '32px';
+    cursorRing.style.borderColor = 'rgba(0, 255, 204, 0.4)';
+  });
+});
+
+// Parallax scrolling
+window.addEventListener('scroll', () => {
+  const scrolled = window.pageYOffset;
+  const rate = scrolled * -0.3;
+  const building = document.querySelector('.building');
+  
+  if (building) {
+    building.style.transform = `translateX(-50%) translateY(${rate}px)`;
+  }
+  
+  // Sky color transitions
+  const sky = document.querySelector('.sky');
+  if (sky) {
+    const progress = Math.min(scrolled / (window.innerHeight * 2), 1);
+    const opacity = 1 - (progress * 0.3);
+    sky.style.opacity = opacity;
+  }
+});
+
+// Floor navigation
+function scrollToFloor(floor) {
+  const targetScroll = (floor - 1) * (window.innerHeight * 0.8);
+  window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+}
+
+// Content overlay system
+function showContent(type) {
+  const overlay = document.getElementById('contentOverlay');
+  const content = document.getElementById('overlayContent');
+  
+  const contentData = {
+    identity: {
+      title: 'Brand Identity & Logo Systems',
+      text: `Every mark carries the weight of recognition. These aren't decorations—they're totems, visual DNA that makes brands unmistakable. From the geometric precision of corporate systems to the hand-lettered soul of independent ventures, each identity emerges from deep understanding of what the brand actually is, not what it thinks it should be.`,
+      images: ['logo_1.jpg', 'logo_9.jpg', 'logo_5.png']
+    },
+    events: {
+      title: 'Sacramento Horror Film Festival',
+      text: `A complete ecosystem spanning multiple years. Every touchpoint—from street-level posters to backstage credentials—carries the same dark DNA. This is identity deployed at scale, where design becomes culture and recognition becomes inevitability.`,
+      images: ['horror_poster_2019.jpg', 'horror_tickets.jpg', 'horror_badge.png']
+    },
+    art: {
+      title: 'Digital Art & Sacred Forms',
+      text: `In the space between consciousness and recognition, patterns emerge. Sacred geometry meets tribal intuition. These compositions exist in the liminal—where intentional design meets unconscious understanding. Each piece is a window into archetypal structures that communicate before language forms.`,
+      images: ['art_6.jpg', 'art_9.jpg', 'art_7.jpg']
+    },
+    photography: {
+      title: 'Mixed Media Photography',
+      text: `Light excavated from darkness. Patterns discovered in chaos. These aren't photographs—they're archaeological finds from the intersection of capture and creation. Each image emerges where the lens becomes a tool for revealing what exists between the visible and the imagined.`,
+      images: ['mm_48.jpg', 'mm_4.jpg', 'mm_20.jpg']
+    }
+  };
+  
+  const data = contentData[type];
+  if (data && content) {
+    content.innerHTML = `
+      <h2 class="content-title">${data.title}</h2>
+      <p class="content-text">${data.text}</p>
+      <div class="content-images">
+        ${data.images.map(img => `<img src="${img}" alt="Portfolio piece" class="content-image">`).join('')}
+      </div>
+    `;
+    
+    if (overlay) {
+      overlay.classList.add('active');
+    }
+  }
+}
+
+function hideContent() {
+  const overlay = document.getElementById('contentOverlay');
+  if (overlay) {
+    overlay.classList.remove('active');
+  }
+}
+</script>
+
+</body>
+</html>
+</style>
+</head>
+<body>
+
+<!-- INTRO OVERLAY -->
+<div class="intro" id="intro">
+  <h1>DAMION TORREZ</h1>
+  <p>Enter the world where brands become landscapes, where stories unfold in layers, where every pixel has purpose and every shadow holds meaning.</p>
+  <button class="intro-btn" onclick="enterWorld()">ENTER THE TOWER</button>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- NAVIGATION -->
+<nav class="nav">
+  <a href="#sky" class="nav-item">VISIONS</a>
+  <a href="#building" class="nav-item">WORKS</a>
+  <a href="#street" class="nav-item">WORLDS</a>
+  <a href="#underground" class="nav-item">DEPTHS</a>
+</nav>
+
+<!-- MAIN WORLD CONTAINER -->
+<div class="world">
+
+  <!-- SKY LAYER -->
+  <div class="sky-layer" id="skyLayer">
+    <div class="stars"></div>
+  </div>
+
+  <!-- BUILDING STRUCTURE -->
+  <div class="building" id="building">
+    
+    <!-- WINDOW ROWS -->
+    <div class="window-row" style="top: 10vh;">
+      <div class="window logo-window" onclick="showContent('logo')">
+        <div class="window-content" style="background-image: url('logo_1.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window logo-window" onclick="showContent('logo')">
+        <div class="window-content" style="background-image: url('logo_9.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window logo-window" onclick="showContent('logo')">
+        <div class="window-content" style="background-image: url('logo_5.png');"></div>
+        <div class="window-glow"></div>
+      </div>
+    </div>
+
+    <div class="window-row" style="top: 20vh;">
+      <div class="window art-window" onclick="showContent('art')">
+        <div class="window-content" style="background-image: url('art_6.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window art-window" onclick="showContent('art')">
+        <div class="window-content" style="background-image: url('art_9.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window art-window" onclick="showContent('art')">
+        <div class="window-content" style="background-image: url('art_7.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+    </div>
+
+    <div class="window-row" style="top: 30vh;">
+      <div class="window horror-window" onclick="showContent('horror')">
+        <div class="window-content" style="background-image: url('horror_poster_2019.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window horror-window" onclick="showContent('horror')">
+        <div class="window-content" style="background-image: url('horror_tickets.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window horror-window" onclick="showContent('horror')">
+        <div class="window-content" style="background-image: url('horror_badge.png');"></div>
+        <div class="window-glow"></div>
+      </div>
+    </div>
+
+    <div class="window-row" style="top: 40vh;">
+      <div class="window photo-window" onclick="showContent('photo')">
+        <div class="window-content" style="background-image: url('mm_48.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window photo-window" onclick="showContent('photo')">
+        <div class="window-content" style="background-image: url('mm_4.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window photo-window" onclick="showContent('photo')">
+        <div class="window-content" style="background-image: url('mm_20.jpg');"></div>
+        <div class="window-glow"></div>
+      </div>
+    </div>
+
+    <div class="window-row" style="top: 50vh;">
+      <div class="window logo-window" onclick="showContent('contact')">
+        <div class="window-content" style="background: linear-gradient(45deg, var(--gold), var(--sunset-orange)); display: flex; align-items: center; justify-content: center; font-family: JetBrains Mono; font-size: 8px; color: var(--night); letter-spacing: 1px;">CONTACT</div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window art-window" onclick="showContent('about')">
+        <div class="window-content" style="background: linear-gradient(45deg, var(--twilight-mid), var(--sunset-pink)); display: flex; align-items: center; justify-content: center; font-family: JetBrains Mono; font-size: 10px; color: var(--offwhite); letter-spacing: 1px;">ABOUT</div>
+        <div class="window-glow"></div>
+      </div>
+      <div class="window photo-window" onclick="showContent('process')">
+        <div class="window-content" style="background: linear-gradient(45deg, var(--underground-brown), var(--dirt)); display: flex; align-items: center; justify-content: center; font-family: JetBrains Mono; font-size: 9px; color: var(--gold); letter-spacing: 1px;">PROCESS</div>
+        <div class="window-glow"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FLYING CREATURES -->
+  <div class="creatures">
+    <div class="crow"></div>
+    <div class="crow" style="animation-delay: -10s; animation-duration: 25s;"></div>
+    <div class="bat"></div>
+    <div class="bat" style="animation-delay: -5s; animation-duration: 18s;"></div>
+    <div class="crow" style="animation-delay: -15s; animation-duration: 22s;"></div>
+  </div>
+
+  <!-- STREET LEVEL -->
+  <div class="street" id="street">
+    <div class="street-lights">
+      <div class="street-light"></div>
+      <div class="street-light"></div>
+      <div class="street-light"></div>
+      <div class="street-light"></div>
+    </div>
+    
+    <!-- BLACK CROSS-EYED KITTEN -->
+    <div class="kitten"></div>
+  </div>
+
+  <!-- UNDERGROUND -->
+  <div class="underground" id="underground">
+    <div class="pipes">
+      <div class="pipe"></div>
+      <div class="pipe"></div>
+    </div>
+    <div class="bugs">
+      <div class="bug"></div>
+      <div class="bug"></div>
+      <div class="bug"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONTENT OVERLAY -->
+<div class="content-overlay" id="contentOverlay">
+  <div class="content-panel" id="contentPanel">
+    <button class="close-btn" onclick="hideContent()">&times;</button>
+    <div id="overlayContent"></div>
+  </div>
+</div>
+
+<script>
+// Cursor tracking
+const cursor = document.getElementById('cursor');
+const cursorTrail = document.getElementById('cursorTrail');
+let mouseX = 0, mouseY = 0;
+let trailX = 0, trailY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+function animateTrail() {
+  trailX += (mouseX - trailX) * 0.1;
+  trailY += (mouseY - trailY) * 0.1;
+  cursorTrail.style.left = trailX + 'px';
+  cursorTrail.style.top = trailY + 'px';
+  requestAnimationFrame(animateTrail);
+}
+animateTrail();
+
+// Cursor hover effects
+document.querySelectorAll('.window, .intro-btn, .nav-item, .close-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '12px';
+    cursor.style.height = '12px';
+    cursorTrail.style.width = '40px';
+    cursorTrail.style.height = '40px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '4px';
+    cursor.style.height = '4px';
+    cursorTrail.style.width = '20px';
+    cursorTrail.style.height = '20px';
+  });
+});
+
+// Parallax scrolling and world transitions
+window.addEventListener('scroll', () => {
+  const scrolled = window.pageYOffset;
+  const rate = scrolled * -0.5;
+  const building = document.getElementById('building');
+  const street = document.getElementById('street');
+  const underground = document.getElementById('underground');
+  
+  // Building parallax
+  building.style.transform = `translateX(-50%) translateY(${rate}px)`;
+  
+  // Sky transitions
+  const skyLayer = document.getElementById('skyLayer');
+  const skyOpacity = Math.max(0, 1 - scrolled / (window.innerHeight * 2));
+  skyLayer.style.opacity = skyOpacity;
+  
+  // Street level appearance
+  if (scrolled > window.innerHeight * 3) {
+    street.style.transform = 'translateY(0)';
+  } else {
+    street.style.transform = 'translateY(100vh)';
+  }
+  
+  // Underground appearance
+  if (scrolled > window.innerHeight * 5) {
+    underground.style.transform = 'translateY(0)';
+  } else {
+    underground.style.transform = 'translateY(100vh)';
+  }
+});
+
+// Enter world function
+function enterWorld() {
+  document.getElementById('intro').classList.add('hidden');
+  document.body.style.overflow = 'auto';
+}
+
+// Content overlay system
+function showContent(type) {
+  const overlay = document.getElementById('contentOverlay');
+  const content = document.getElementById('overlayContent');
+  
+  const contentData = {
+    logo: {
+      title: 'Brand Identity & Logo Systems',
+      text: `Every mark I create carries the weight of purpose. These aren't decorations—they're totems, symbols that hold the essence of what a brand truly is. From the geometric precision of corporate identity to the hand-lettered soul of independent ventures, each logo is a key that unlocks recognition in a world drowning in noise.`,
+      images: ['logo_1.jpg', 'logo_9.jpg', 'logo_5.png']
+    },
+    art: {
+      title: 'Graphic & Digital Art',
+      text: `In the space between darkness and light, forms emerge. Sacred geometry meets tribal intuition. These pieces exist in the liminal—where conscious design meets unconscious recognition. Each composition is a window into archetypal structures that speak before words form.`,
+      images: ['art_6.jpg', 'art_9.jpg', 'art_7.jpg']
+    },
+    horror: {
+      title: 'Sacramento Horror Film Festival',
+      text: `A complete brand ecosystem spanning multiple years. Every touchpoint—from street-level posters to backstage credentials—carries the same dark DNA. This is how identity becomes culture, how design becomes experience.`,
+      images: ['horror_poster_2019.jpg', 'horror_tickets.jpg', 'horror_badge.png']
+    },
+    photo: {
+      title: 'Mixed Media Photography',
+      text: `I hunt light in darkness, find patterns in chaos. These aren't photographs—they're excavations. Each image emerges from the intersection of capture and creation, where the lens becomes a tool for revealing what exists between the visible and the imagined.`,
+      images: ['mm_48.jpg', 'mm_4.jpg', 'mm_20.jpg']
+    },
+    contact: {
+      title: 'Let\'s Build Worlds Together',
+      text: `Ready to create something that outlasts the trend cycle? Something that becomes part of the cultural landscape rather than disappearing into it?<br><br><strong>contactdamion@gmail.com</strong><br><br>Every project begins with understanding what you're actually building—not what you think you're building, but what wants to emerge through your vision.`
+    },
+    about: {
+      title: 'The Builder',
+      text: `Twenty years creating visual languages that don't just communicate—they colonize consciousness. I read between the lines of what clients say and what they mean, then build the bridge between intention and recognition.<br><br>Every aesthetic choice is deliberate. Every color carries weight. Every form has function. This is visual problem-solving at the level of archetype.`
+    },
+    process: {
+      title: 'How Worlds Are Built',
+      text: `<strong>01. EXCAVATION</strong><br>Before any visual emerges, I dig. What are you actually building? What's the psychology of your audience? What signal is hiding in the noise?<br><br><strong>02. DISTILLATION</strong><br>Every brand has a core frequency. I locate it and amplify it until it becomes impossible to ignore.<br><br><strong>03. CONSTRUCTION</strong><br>Not just a logo—a complete visual ecosystem. Typography, color theory, motion language, spatial relationships. Every element in service of a single vision.<br><br><strong>04. DEPLOYMENT</strong><br>Launch isn't the end—it's the beginning of cultural infiltration.`
+    }
+  };
+  
+  const data = contentData[type];
+  content.innerHTML = `
+    <h2 style="font-family: Playfair Display; font-size: 28px; color: var(--gold); margin-bottom: 20px;">${data.title}</h2>
+    <p style="font-family: Inter; font-size: 16px; line-height: 1.7; color: var(--offwhite); margin-bottom: 30px;">${data.text}</p>
+    ${data.images ? `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+      ${data.images.map(img => `<img src="${img}" alt="Work sample" style="width: 100%; height: 120px; object-fit: cover; border: 1px solid var(--gold);">`).join('')}
+    </div>` : ''}
+  `;
+  
+  overlay.classList.add('active');
+}
+
+function hideContent() {
+  document.getElementById('contentOverlay').classList.remove('active');
+}
+
+// Navigation scrolling
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', e => {
+    e.preventDefault();
+    const target = e.target.getAttribute('href').substring(1);
+    let scrollTarget = 0;
+    
+    switch(target) {
+      case 'sky': scrollTarget = 0; break;
+      case 'building': scrollTarget = window.innerHeight * 2; break;
+      case 'street': scrollTarget = window.innerHeight * 4; break;
+      case 'underground': scrollTarget = window.innerHeight * 6; break;
+    }
+    
+    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+  });
+});
+
+// Initialize
+document.body.style.overflow = 'hidden';
+</script>
+
+</body>
+</html>
